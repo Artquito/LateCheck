@@ -8,6 +8,6 @@ $dbPassword = "";
 try {
     $pdo = new PDO($dsn, $dbUsername, $dbPassword);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOExeption $e) {
+} catch (PDOException $e) {
     echo "Connection failed : " . $e->getMessage();
 }
