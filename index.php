@@ -17,10 +17,38 @@
 
     </ul>
 
+
+    <h3>Late List</h3>
+    <ul id="lateList">
+        <button id="lateSubmitBtn">submit</button>
+    </ul>
+
     <script>
         let searchTerm = document.getElementById("search")
         let suggestionList = document.getElementById("suggestionList")
+        let lateCard =document.getElementById("lateList")
+        const lateList = []
         let timeoutId
+
+        function addToLateList(lateData) {
+            lateList.push(lateData)
+            // console.log(lateList);
+        }
+
+        function displayLateList() {
+            lateCard.innerHTML = "";
+            // console.log(lateList);
+            lateList.forEach(student => {
+                // console.log(student.fullName);
+                const listedStudent = document.createElement("li")
+                listedStudent.textContent = student.fullName
+
+                lateCard.insertBefore(listedStudent, lateCard.firstChild)
+            });
+        }
+
+        // addToLateList({ fullName: "sandi", userId: 1 })
+
         function fetchSuggestions(searchTerm) {
 
             let xhr = new XMLHttpRequest();
@@ -43,10 +71,12 @@
             // Send the POST request with the data
             xhr.send(params);
         }
+
         function clearSuggestion() {
             // Clear existing suggestions
             suggestionList.innerHTML = "";
         }
+
         function displaySuggestions(suggestions) {
 
             clearSuggestion()
@@ -64,7 +94,9 @@
                 // Add click event listener to the button
                 button.addEventListener("click", function () {
                     // Log the ID of the person
-                    console.log("ID:", suggestion.userId)
+                    // console.log("ID:", suggestion.userId)
+                    addToLateList(suggestion)
+                    displayLateList();
                 });
                 button.style.marginLeft = "10px"; // Adjust the margin as needed
 
@@ -75,6 +107,7 @@
                 suggestionList.appendChild(listItem)
             });
         }
+
         function handleSearchInput() {
             // Clear previous timeout if exists
             clearTimeout(timeoutId);
@@ -90,9 +123,11 @@
 
 
         searchTerm.addEventListener("focusout", function () {
-           
+            timeoutId = setTimeout(function () {
+                // Function to execute after the delay
                 clearSuggestion()
-            
+            }.bind(this), 400);
+
         })
         searchTerm.addEventListener("input", handleSearchInput)
         searchTerm.addEventListener("focus", handleSearchInput)
